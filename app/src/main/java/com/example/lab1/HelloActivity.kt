@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 
-import org.w3c.dom.Text
-
 class HelloActivity: Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -14,6 +12,7 @@ class HelloActivity: Activity() {
         val button1 = findViewById<Button>(R.id.button1)
         val button2 = findViewById<Button>(R.id.button2)
         val text = findViewById<TextView>(R.id.textView)
+
         button1.setOnClickListener {
             b[0]++;
             text.text="Нажатий на левую: " + b[0] + "\nНажатий на правую: " + b[1]
