@@ -15,11 +15,11 @@ class HelloActivity: Activity() {
 
         button1.setOnClickListener {
             b[0]++;
-            text.text="Нажатий на левую: " + b[0] + "\nНажатий на правую: " + b[1]
+            text.text = getString(R.string.click_counter_format, b[0], b[1])
         }
         button2.setOnClickListener {
             b[1]++;
-            text.text="Нажатий на левую: " + b[0] + "\nНажатий на правую: " + b[1]
+            text.text = getString(R.string.click_counter_format, b[0], b[1])
         }
 
     }

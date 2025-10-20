@@ -25,7 +25,7 @@ class ListActivity :Activity(){
 
         button.setOnClickListener {
 
-            textAdapter.add("User_" + b)
+            textAdapter.add(getString(R.string.user_format,b))
             b++
         }
 

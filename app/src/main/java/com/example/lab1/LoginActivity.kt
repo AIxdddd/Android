@@ -1,79 +1,71 @@
 package com.example.lab1
 
-import android.util.Log
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.widget.ArrayAdapter
+import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
+import kotlin.toString
 
 class LoginActivity:Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login)
-        val logField = findViewById<EditText>(R.id.editTextLog)
-        val nameField = findViewById<EditText>(R.id.editTextName)
-        val passwordField = findViewById<EditText>(R.id.editTextPassword)
-        val birthDateField = findViewById<EditText>(R.id.editTextDate)
-        val male = findViewById<CheckBox>(R.id.checkBoxMale)
-        val female = findViewById<CheckBox>(R.id.checkBoxFemale)
-        val image = findViewById<ImageButton>(R.id.imageButton)
-        val addButton = findViewById<Button>(R.id.button3)
+        val Logfield = findViewById<EditText>(R.id.editTextLog2)
+        val Passwordfield = findViewById<EditText>(R.id.editTextPassword2)
+        val Enterbutton = findViewById<Button>(R.id.button4)
+        val Regbutton = findViewById<Button>(R.id.button5)
+        val Closebutton = findViewById<Button>(R.id.button6)
 
-        // Изначально блокируем кнопку
-        addButton.isEnabled = false
 
-        // Добавляем слушатель изменений текста в поле логина
-        logField.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+        val MenuIntent = Intent(this, MenuActivity::class.java)
+        val RegIntent = Intent(this, RegisterActivity::class.java)
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
 
-            override fun afterTextChanged(s: Editable?) {
-                // Проверяем наличие символа "@" в логине
-                val loginText = s?.toString() ?: ""
-                val hasAtSymbol = loginText.contains("@")
 
-                // Блокируем или разблокируем кнопку в зависимости от наличия "@"
-                addButton.isEnabled = hasAtSymbol
 
-                // Можно также добавить визуальную обратную связь
-                if (!hasAtSymbol && loginText.isNotEmpty()) {
-                    logField.error = "Логин должен содержать символ @"
-                } else {
-                    logField.error = null
-                }
-            }
-        })
 
-        addButton.setOnClickListener {
-            Log.i("Login","Добавляет пользователя")
+        Regbutton.setOnClickListener {
+
+            startActivity(RegIntent)
+
         }
 
-        image.setOnClickListener {
-            Log.i("Login","Выбор изображения")
+
+        Enterbutton.setOnClickListener {
+            startActivity(MenuIntent)
+
         }
-        male.setOnClickListener {
-            if(male.isChecked){
-            if (female.isChecked){
-                female.isChecked= false
-            }
-        }
+
 
     }
-        female.setOnClickListener {
-            if(female.isChecked){
-                if (male.isChecked){
-                    male.isChecked= false
-                }
-            }
-        }
+
+    override fun onStart() {
+        super.onStart()
+        Log.i(R.string.login.toString(), "onStart")
+    }
+    override fun onResume() {
+        super.onResume()
+        Log.i(R.string.login.toString(), "onResume")
+    }
+    override fun onRestart() {
+        super.onRestart()
+        Log.i(R.string.login.toString(), "onRestart")
+    }
+    override fun onPause() {
+        super.onPause()
+        Log.i(R.string.login.toString(), "onPause")
+    }
+    override fun onStop() {
+        super.onStop()
+        Log.i(R.string.login.toString(), "onStop")
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i(R.string.login.toString(), "onDestroy")
     }
 
 }

@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">Lab1</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="menu">Menu</string>
+
+    <!-- Сообщения для Log -->
+    <string name="log_add_user">Добавляет пользователя</string>
+    <string name="log_select_image">Выбор изображения</string>
+
+
+    <!-- Сообщения об ошибках -->
+    <string name="error_login_at_symbol">Логин должен содержать символ @</string>
+
+    <!-- Текст для CheckBox -->
+    <string name="checkbox_male">Мужской</string>
+    <string name="checkbox_female">Женский</string>
+
+    <!-- Текст для HelloActivity -->
+    <string name="click_counter_format">Нажатий на левую: %d\nНажатий на правую: %d</string>
+
+    <!-- Текст для ListActivity -->
+    <string name="user_format">User_%d</string>
+
+    <!-- Телефонный номер -->
+    <string name="phone_number">+70000000000</string>
 </resources>
