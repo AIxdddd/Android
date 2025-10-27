@@ -13,7 +13,7 @@ class HelloActivity: Activity() {
         val button2 = findViewById<Button>(R.id.button2)
         val text = findViewById<TextView>(R.id.textView)
 
-        button1.setOnClickListener {
+        button1.setOnClickListener { 
             b[0]++;
             text.text = getString(R.string.click_counter_format, b[0], b[1])
         }

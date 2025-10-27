@@ -22,6 +22,7 @@ class LoginActivity:Activity() {
 
 
         val MenuIntent = Intent(this, MenuActivity::class.java)
+
         val RegIntent = Intent(this, RegisterActivity::class.java)
 
 
@@ -36,6 +37,7 @@ class LoginActivity:Activity() {
 
 
         Enterbutton.setOnClickListener {
+            MenuIntent.putExtra("login", Logfield.text.toString())
             startActivity(MenuIntent)
 
         }

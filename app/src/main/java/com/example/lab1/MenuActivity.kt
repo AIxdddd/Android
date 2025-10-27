@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.TextView
 
 class MenuActivity:Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,29 +18,24 @@ class MenuActivity:Activity() {
         val Errorbutton = findViewById<Button>(R.id.button7)
         val Closebutton = findViewById<Button>(R.id.button11)
         val Startbutton = findViewById<Button>(R.id.button10)
+        val Textfield = findViewById<TextView>(R.id.textView9)
 
         val OptionsIntent = Intent(this, OptionsActivity::class.java)
         val ProfileIntent = Intent(this, ProfileActivity::class.java)
 
-
-
+        val arguments: Bundle? = intent.extras
+        val a = intent.extras?.getString("login")
+        Textfield.text = "Добро пожаловать, $a"
 
 
 
 
         Errorbutton.setOnClickListener {
 
-            val intent = Intent(Intent.ACTION_DIAL).apply {
-                data = Uri.parse(getString(R.string.phone_number))
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("mailto:")
             }
-            if (intent.resolveActivity(packageManager) != null){
                 startActivity(intent)
-            } else {
-            // Если нет приложения для совершения звонка
-            Log.e(getString(R.string.menu), "Нет приложения для совершения звонка")
-        }
-
-
         }
 
 
