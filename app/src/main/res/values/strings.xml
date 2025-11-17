@@ -24,4 +24,11 @@
 
     <!-- Телефонный номер -->
     <string name="phone_number">+70000000000</string>
+    <string name="admin_activity">Администрирование</string>
+    <string name="make_admin">Сделать администратором</string>
+    <string name="admin_status">Статус: %s</string>
+    <string name="user">Пользователь</string>
+    <string name="administrator">Администратор</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Темная</string>
 </resources>

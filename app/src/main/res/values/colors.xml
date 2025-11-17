@@ -7,4 +7,18 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+        <color name="colorPrimary">#03A9F4</color>
+        <color name="colorPrimaryDark">#0288D1</color>
+        <color name="colorAccent">#4CAF50</color>
+
+        <!-- Цвета для светлой темы -->
+        <color name="light_background">#FFFFFF</color>
+        <color name="light_text">#000000</color>
+
+        <!-- Цвета для темной темы -->
+        <color name="dark_background">#121212</color>
+        <color name="dark_text">#FFFFFF</color>
+        <color name="errorButtonColor">#8C0100</color>
+
 </resources>
