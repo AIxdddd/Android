@@ -88,53 +88,72 @@ class RegisterActivity : Activity() {
                 female.isChecked -> getString(R.string.checkbox_female)
                 else -> ""
             }
+            Thread {
+                try {
+                    // Проверяем, есть ли уже пользователи в базе
+                    val isFirstUser = !dbHelper.hasUsers()
 
-            try {
-                // Проверяем, есть ли уже пользователи в базе
-                val isFirstUser = !dbHelper.hasUsers()
+                    val user = User(
+                        login = login,
+                        password = password,
+                        name = name,
+                        birthDate = birthDate,
+                        gender = gender,
+                        isAdmin = isFirstUser
+                    )
 
-                val user = User(
-                    login = login,
-                    password = password,
-                    name = name,
-                    birthDate = birthDate,
-                    gender = gender,
-                    isAdmin = isFirstUser
-                )
+                    val userId = dbHelper.addUser(user)
 
-                val userId = dbHelper.addUser(user)
-                if (userId != -1L) {
-                    Toast.makeText(this, "Регистрация успешна!", Toast.LENGTH_SHORT).show()
-                    if (isFirstUser) {
-                        Toast.makeText(this, "Вы первый пользователь и стали администратором!", Toast.LENGTH_LONG).show()
+                    runOnUiThread {
+                    if (userId != -1L) {
+                        Toast.makeText(this, "Регистрация успешна!", Toast.LENGTH_SHORT).show()
+                        if (isFirstUser) {
+                            Toast.makeText(
+                                this,
+                                "Вы первый пользователь и стали администратором!",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
+                        // Автоматически входим после регистрации
+                        val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
+                        with(sharedPreferences.edit()) {
+                            putLong("current_user_id", userId)
+                            putString("current_user_login", user.login)
+                            putBoolean("current_user_is_admin", user.isAdmin)
+                            putString("current_user_theme", user.theme)
+                            apply()
+                        }
+
+                        // Переходим в меню
+                        val menuIntent = Intent(this, MenuActivity::class.java).apply {
+                            putExtra("login", user.login)
+                            putExtra("is_admin", user.isAdmin)
+                        }
+                        startActivity(menuIntent)
+                        finish()
+                    } else {
+                        Toast.makeText(
+                            this,
+                            "Ошибка регистрации. Возможно, логин уже занят.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-
-                    // Автоматически входим после регистрации
-                    val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
-                    with(sharedPreferences.edit()) {
-                        putLong("current_user_id", userId)
-                        putString("current_user_login", user.login)
-                        putBoolean("current_user_is_admin", user.isAdmin)
-                        putString("current_user_theme", user.theme)
-                        apply()
                     }
-
-                    // Переходим в меню
-                    val menuIntent = Intent(this, MenuActivity::class.java).apply {
-                        putExtra("login", user.login)
-                        putExtra("is_admin", user.isAdmin)
+                } catch (e: Exception) {
+                    runOnUiThread {
+                        Toast.makeText(
+                            this,
+                            "Ошибка при регистрации: ${e.message}",
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
                     }
-                    startActivity(menuIntent)
-                    finish()
-                } else {
-                    Toast.makeText(this, "Ошибка регистрации. Возможно, логин уже занят.", Toast.LENGTH_SHORT).show()
+                    Log.e("RegisterActivity", "Registration error", e)
                 }
-            } catch (e: Exception) {
-                Toast.makeText(this, "Ошибка при регистрации: ${e.message}", Toast.LENGTH_LONG).show()
-                Log.e("RegisterActivity", "Registration error", e)
-            }
 
-            Log.i(getString(R.string.register), getString(R.string.log_add_user))
+                Log.i(getString(R.string.register), getString(R.string.log_add_user))
+            }.start()
         }
 
         image.setOnClickListener {

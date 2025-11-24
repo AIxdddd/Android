@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import kotlin.concurrent.thread
 
 class AdminActivity : Activity() {
 
@@ -19,15 +20,16 @@ class AdminActivity : Activity() {
         super.onCreate(savedInstanceState)
         sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         dbHelper = DatabaseHelper(this)
+        var theme = "light";
 
+            theme = dbHelper.getUserTheme(sharedPreferences.getLong("current_user_id", -1))
 
-        when (dbHelper.getUserTheme(sharedPreferences.getLong("current_user_id", -1))) {
+        when (theme) {
             "dark" -> setTheme(R.style.Theme_Lab1_Dark)
             else -> setTheme(R.style.Theme_Lab1_Light)
         }
         setContentView(R.layout.admin)
 
-        dbHelper = DatabaseHelper(this)
         userList = findViewById(R.id.adminListView)
 
         loadUsers()
@@ -48,12 +50,16 @@ class AdminActivity : Activity() {
     }
 
     private fun loadUsers() {
-        users = dbHelper.getAllUsers()
+        Thread {
+            users = dbHelper.getAllUsers()
+
         val userDisplayList = users.map { user ->
             "${user.name} (${user.login})${if (user.isAdmin) " - Администратор" else ""}"
         }
-
+        runOnUiThread {
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, userDisplayList)
-        userList.adapter = adapter
+        userList.adapter = adapter}
+        }.start()
     }
+
 }

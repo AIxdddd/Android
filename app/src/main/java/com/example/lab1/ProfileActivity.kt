@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import kotlin.concurrent.thread
 
 class ProfileActivity : Activity() {
 
@@ -41,21 +42,24 @@ class ProfileActivity : Activity() {
     }
 
     private fun setupUI() {
-        val makeAdminButton = findViewById<Button>(R.id.buttonMakeAdmin)
-
-        // Показываем кнопку "Сделать администратором" только если:
-        // 1. Текущий пользователь - администратор
-        // 2. Это не его собственный профиль
-        // 3. Это просмотр из админки
+        val makeAdminButton = findViewById<Button>(R.id.button14)
         val isCurrentUserAdmin = sharedPreferences.getBoolean("current_user_is_admin", false)
         val isOwnProfile = viewedUserId == currentUserId
 
         if (isCurrentUserAdmin && !isOwnProfile && isAdminView) {
             makeAdminButton.visibility = View.VISIBLE
             makeAdminButton.setOnClickListener {
-                dbHelper.updateUserAdminStatus(viewedUserId, true)
-                Toast.makeText(this, "Пользователь назначен администратором", Toast.LENGTH_SHORT).show()
-                finish()
+                Thread {
+                    dbHelper.updateUserAdminStatus(viewedUserId, true)
+                    runOnUiThread {
+                        Toast.makeText(
+                            this,
+                            "Пользователь назначен администратором",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        finish()
+                    }
+                }.start()
             }
         } else {
             makeAdminButton.visibility = View.GONE
@@ -63,19 +67,23 @@ class ProfileActivity : Activity() {
     }
 
     private fun loadUserData() {
-        val users = dbHelper.getAllUsers()
-        val user = users.find { it.id == viewedUserId }
+        Thread {
+            val users = dbHelper.getAllUsers()
+            val user = users.find { it.id == viewedUserId }
+            runOnUiThread {
+            user?.let {
+                findViewById<TextView>(R.id.textView5).text = "Логин: ${it.login}"
+                findViewById<TextView>(R.id.textView6).text = "Дата рождения: ${it.birthDate}"
+                findViewById<TextView>(R.id.textView7).text = "ФИО: ${it.name}"
+                findViewById<TextView>(R.id.textView8).text = "Пол: ${it.gender}"
 
-        user?.let {
-            findViewById<TextView>(R.id.textView5).text = "Логин: ${it.login}"
-            findViewById<TextView>(R.id.textView6).text = "Дата рождения: ${it.birthDate}"
-            findViewById<TextView>(R.id.textView7).text = "ФИО: ${it.name}"
-            findViewById<TextView>(R.id.textView8).text = "Пол: ${it.gender}"
-
-            // Добавляем информацию о статусе администратора
-            val adminStatusText = findViewById<TextView>(R.id.textViewAdminStatus)
-            adminStatusText.text = if (it.isAdmin) "Статус: Администратор" else "Статус: Пользователь"
+                // Добавляем информацию о статусе администратора
+                val adminStatusText = findViewById<TextView>(R.id.textViewAdminStatus)
+                adminStatusText.text =
+                    if (it.isAdmin) "Статус: Администратор" else "Статус: Пользователь"
+            }
         }
+        }.start()
     }
     override fun onRestart() {
         super.onRestart()

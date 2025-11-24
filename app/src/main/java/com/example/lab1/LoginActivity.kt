@@ -42,29 +42,32 @@ class LoginActivity : Activity() {
         enterButton.setOnClickListener {
             val login = logField.text.toString()
             val password = passwordField.text.toString()
+            Thread {
+                val user = dbHelper.getUser(login, password)
+                runOnUiThread {
+                    if (user != null) {
+                        // Сохраняем данные пользователя в SharedPreferences
+                        with(sharedPreferences.edit()) {
+                            putLong("current_user_id", user.id)
+                            putString("current_user_login", user.login)
+                            putBoolean("current_user_is_admin", user.isAdmin)
+                            putString("current_user_theme", user.theme)
+                            apply()
+                        }
 
-            val user = dbHelper.getUser(login, password)
-            if (user != null) {
-                // Сохраняем данные пользователя в SharedPreferences
-                with(sharedPreferences.edit()) {
-                    putLong("current_user_id", user.id)
-                    putString("current_user_login", user.login)
-                    putBoolean("current_user_is_admin", user.isAdmin)
-                    putString("current_user_theme", user.theme)
-                    apply()
+                        // Применяем тему пользователя
+                        applyUserTheme(user.theme)
+
+                        val menuIntent = Intent(this, MenuActivity::class.java).apply {
+                            putExtra("login", user.login)
+                            putExtra("is_admin", user.isAdmin)
+                        }
+                        startActivity(menuIntent)
+                    } else {
+                        Toast.makeText(this, "Неверный логин или пароль", Toast.LENGTH_SHORT).show()
+                    }
                 }
-
-                // Применяем тему пользователя
-                applyUserTheme(user.theme)
-
-                val menuIntent = Intent(this, MenuActivity::class.java).apply {
-                    putExtra("login", user.login)
-                    putExtra("is_admin", user.isAdmin)
-                }
-                startActivity(menuIntent)
-            } else {
-                Toast.makeText(this, "Неверный логин или пароль", Toast.LENGTH_SHORT).show()
-            }
+            }.start()
         }
 
         regButton.setOnClickListener {

@@ -41,28 +41,26 @@ class OptionsActivity : Activity() {
 
         themeSwitch.setOnClickListener {
             val theme = if (themeSwitch.isChecked) "dark" else "light"
+            Thread {
+                // Сохраняем тему в SharedPreferences для неавторизованных пользователей
+                with(sharedPreferences.edit()) {
+                    putString("app_theme", theme)
+                    apply()
+                }
 
-            // Сохраняем тему в SharedPreferences для неавторизованных пользователей
-            with(sharedPreferences.edit()) {
-                putString("app_theme", theme)
-                apply()
-            }
-
-            // Если пользователь авторизован, сохраняем тему в БД
-            val currentUserId = sharedPreferences.getLong("current_user_id", -1)
-            if (currentUserId != -1L) {
-                dbHelper.updateUserTheme(currentUserId, theme)
-            }
-
-
-
-            Toast.makeText(this, "Тема изменена", Toast.LENGTH_SHORT).show()
-            recreate() // Перезагружаем activity для применения темы
+                // Если пользователь авторизован, сохраняем тему в БД
+                val currentUserId = sharedPreferences.getLong("current_user_id", -1)
+                if (currentUserId != -1L) {
+                    dbHelper.updateUserTheme(currentUserId, theme)
+                }
 
 
+                runOnUiThread {
+                    Toast.makeText(this, "Тема изменена", Toast.LENGTH_SHORT).show()
+                    recreate() // Перезагружаем activity для применения темы
+                }
 
-
-
+            }.start()
         }
 
 

@@ -28,8 +28,6 @@ class MenuActivity : Activity() {
         }
         setContentView(R.layout.menu)
 
-        sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-
         val adminButton = findViewById<Button>(R.id.button9)
         val profileButton = findViewById<Button>(R.id.button8)
         val errorButton = findViewById<Button>(R.id.button7)
@@ -70,6 +68,14 @@ class MenuActivity : Activity() {
                 putExtra("user_id", sharedPreferences.getLong("current_user_id", -1))
             }
             startActivity(Intent)
+        }
+        startButton.setOnClickListener {
+            val Intent = Intent(this, GameActivity::class.java).apply {
+                // Передаем ID текущего пользователя
+                putExtra("user_id", sharedPreferences.getLong("current_user_id", -1))
+            }
+            startActivity(Intent)
+
         }
 
         closeButton.setOnClickListener {
