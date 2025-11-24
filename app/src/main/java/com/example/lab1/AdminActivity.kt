@@ -8,23 +8,19 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import kotlin.concurrent.thread
-
+import com.example.lab1.databinding.AdminBinding
 class AdminActivity : Activity() {
 
     private lateinit var dbHelper: DatabaseHelper
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var userList: ListView
     private lateinit var users: List<User>
-
+    private lateinit var binding: AdminBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         dbHelper = DatabaseHelper(this)
-        var theme = "light";
-
-            theme = dbHelper.getUserTheme(sharedPreferences.getLong("current_user_id", -1))
-
-        when (theme) {
+        when (dbHelper.getUserTheme(sharedPreferences.getLong("current_user_id", -1))) {
             "dark" -> setTheme(R.style.Theme_Lab1_Dark)
             else -> setTheme(R.style.Theme_Lab1_Light)
         }

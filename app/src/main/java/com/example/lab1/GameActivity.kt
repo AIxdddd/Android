@@ -11,59 +11,56 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import kotlin.random.Random
-
+import com.example.lab1.databinding.GameBinding
 class GameActivity: Activity() {
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var dbHelper: DatabaseHelper
-
+    private lateinit var binding: GameBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         dbHelper = DatabaseHelper(this)
 
 
+
         when (dbHelper.getUserTheme(sharedPreferences.getLong("current_user_id", -1))) {
             "dark" -> setTheme(R.style.Theme_Lab1_Dark)
             else -> setTheme(R.style.Theme_Lab1_Light)
         }
-        setContentView(R.layout.game)
-        val rockButton = findViewById<Button>(R.id.button15)
-        val paperButton = findViewById<Button>(R.id.button18)
-        val scissorsButton = findViewById<Button>(R.id.button16)
-        val enemyField = findViewById<TextView>(R.id.textView11)
-        val textField = findViewById<TextView>(R.id.textView10)
-        rockButton.setOnClickListener {
+        binding = GameBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.rockButton.setOnClickListener {
             var randomNumber = Random.nextInt(1, 4)
             when (randomNumber){
-                1 -> enemyField.text = "Ход противника:\nкамень"
-                2 -> enemyField.text = "Ход противника:\nбумага"
-                3 -> enemyField.text = "Ход противника:\nножницы"
+                1 -> binding.enemyField.text = "Ход противника:\nкамень"
+                2 -> binding.enemyField.text = "Ход противника:\nбумага"
+                3 -> binding.enemyField.text = "Ход противника:\nножницы"
             }
-            enemyField.visibility = View.VISIBLE
-            textField.text=game("rock",1,randomNumber)
+            binding.enemyField.visibility = View.VISIBLE
+            binding.textField.text=game("rock",1,randomNumber)
 
         }
 
-        paperButton.setOnClickListener {
+        binding.paperButton.setOnClickListener {
             var randomNumber = Random.nextInt(1, 4)
             when (randomNumber){
-                1 -> enemyField.text = "Ход противника:\nкамень"
-                2 -> enemyField.text = "Ход противника:\nбумага"
-                3 -> enemyField.text = "Ход противника:\nножницы"
+                1 -> binding.enemyField.text = "Ход противника:\nкамень"
+                2 -> binding.enemyField.text = "Ход противника:\nбумага"
+                3 -> binding.enemyField.text = "Ход противника:\nножницы"
             }
-            enemyField.visibility = View.VISIBLE
-            textField.text=game("paper",2,randomNumber)
+            binding.enemyField.visibility = View.VISIBLE
+            binding.textField.text=game("paper",2,randomNumber)
         }
-        scissorsButton.setOnClickListener {
+        binding.scissorsButton.setOnClickListener {
             var randomNumber = Random.nextInt(1, 4)
             when (randomNumber){
-                1 -> enemyField.text = "Ход противника:\nкамень"
-                2 -> enemyField.text = "Ход противника:\nбумага"
-                3 -> enemyField.text = "Ход противника:\nножницы"
+                1 -> binding.enemyField.text = "Ход противника:\nкамень"
+                2 -> binding.enemyField.text = "Ход противника:\nбумага"
+                3 -> binding.enemyField.text = "Ход противника:\nножницы"
             }
-            enemyField.visibility = View.VISIBLE
-            textField.text=game("scissors",3,randomNumber)
+            binding.enemyField.visibility = View.VISIBLE
+            binding.textField.text=game("scissors",3,randomNumber)
         }
 
 

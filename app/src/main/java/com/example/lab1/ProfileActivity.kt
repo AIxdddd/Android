@@ -5,10 +5,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import kotlin.concurrent.thread
+import com.example.lab1.databinding.ProfileBinding
 
 class ProfileActivity : Activity() {
 
@@ -17,7 +16,7 @@ class ProfileActivity : Activity() {
     private var currentUserId: Long = -1
     private var isAdminView: Boolean = false
     private var viewedUserId: Long = -1
-
+    private lateinit var binding: ProfileBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
@@ -28,7 +27,8 @@ class ProfileActivity : Activity() {
             "dark" -> setTheme(R.style.Theme_Lab1_Dark)
             else -> setTheme(R.style.Theme_Lab1_Light)
         }
-        setContentView(R.layout.profile)
+        binding = ProfileBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         dbHelper = DatabaseHelper(this)
         sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
@@ -42,13 +42,13 @@ class ProfileActivity : Activity() {
     }
 
     private fun setupUI() {
-        val makeAdminButton = findViewById<Button>(R.id.button14)
+
         val isCurrentUserAdmin = sharedPreferences.getBoolean("current_user_is_admin", false)
         val isOwnProfile = viewedUserId == currentUserId
 
         if (isCurrentUserAdmin && !isOwnProfile && isAdminView) {
-            makeAdminButton.visibility = View.VISIBLE
-            makeAdminButton.setOnClickListener {
+            binding.makeAdminButton.visibility = View.VISIBLE
+            binding.makeAdminButton.setOnClickListener {
                 Thread {
                     dbHelper.updateUserAdminStatus(viewedUserId, true)
                     runOnUiThread {
@@ -62,7 +62,7 @@ class ProfileActivity : Activity() {
                 }.start()
             }
         } else {
-            makeAdminButton.visibility = View.GONE
+            binding.makeAdminButton.visibility = View.GONE
         }
     }
 
@@ -72,14 +72,13 @@ class ProfileActivity : Activity() {
             val user = users.find { it.id == viewedUserId }
             runOnUiThread {
             user?.let {
-                findViewById<TextView>(R.id.textView5).text = "Логин: ${it.login}"
-                findViewById<TextView>(R.id.textView6).text = "Дата рождения: ${it.birthDate}"
-                findViewById<TextView>(R.id.textView7).text = "ФИО: ${it.name}"
-                findViewById<TextView>(R.id.textView8).text = "Пол: ${it.gender}"
+                binding.login.text = "Логин: ${it.login}"
+                binding.dataOfBirth.text = "Дата рождения: ${it.birthDate}"
+                binding.name.text = "ФИО: ${it.name}"
+                binding.gender.text = "Пол: ${it.gender}"
 
                 // Добавляем информацию о статусе администратора
-                val adminStatusText = findViewById<TextView>(R.id.textViewAdminStatus)
-                adminStatusText.text =
+                binding.textViewAdminStatus.text =
                     if (it.isAdmin) "Статус: Администратор" else "Статус: Пользователь"
             }
         }

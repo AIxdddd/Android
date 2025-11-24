@@ -13,10 +13,10 @@
         android:checked="false"
         android:text="Женский"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDate" />
+        app:layout_constraintTop_toBottomOf="@+id/birthDateFieldReg" />
 
     <EditText
-        android:id="@+id/editTextLog"
+        android:id="@+id/logFieldReg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -28,7 +28,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageButton" />
 
     <EditText
-        android:id="@+id/editTextName"
+        android:id="@+id/nameFieldReg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -36,10 +36,10 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextLog" />
+        app:layout_constraintTop_toBottomOf="@+id/logFieldReg" />
 
     <EditText
-        android:id="@+id/editTextDate"
+        android:id="@+id/birthDateFieldReg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -47,10 +47,10 @@
         android:inputType="date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordFieldReg" />
 
     <EditText
-        android:id="@+id/editTextPassword"
+        android:id="@+id/passwordFieldReg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -58,7 +58,7 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextName" />
+        app:layout_constraintTop_toBottomOf="@+id/nameFieldReg" />
 
     <CheckBox
         android:id="@+id/checkBoxMale"
@@ -70,7 +70,7 @@
         android:password="false"
         android:text="Мужской"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDate" />
+        app:layout_constraintTop_toBottomOf="@+id/birthDateFieldReg" />
 
     <ImageButton
         android:id="@+id/imageButton"
@@ -83,7 +83,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?android:attr/colorBackground"

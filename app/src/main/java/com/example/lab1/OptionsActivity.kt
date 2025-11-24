@@ -2,19 +2,17 @@ package com.example.lab1
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Switch
 import android.widget.Toast
-
+import com.example.lab1.databinding.OptionsBinding
 class OptionsActivity : Activity() {
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var dbHelper: DatabaseHelper
-
+    private lateinit var binding: OptionsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -28,19 +26,18 @@ class OptionsActivity : Activity() {
             else -> setTheme(R.style.Theme_Lab1_Light)
         }
 
-        //setTheme(R.style.Theme_Lab1_Light)
-        setContentView(R.layout.options)
+        binding = OptionsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
 
 
-        val themeSwitch = findViewById<Switch>(R.id.switch1)
-        val applyButton = findViewById<Button>(R.id.button13)
+
         // Устанавливаем текущее состояние переключателя
         val currentTheme = sharedPreferences.getString("app_theme", "light") ?: "light"
-        themeSwitch.isChecked = currentTheme == "dark"
+        binding.themeSwitch.isChecked = currentTheme == "dark"
 
-        themeSwitch.setOnClickListener {
-            val theme = if (themeSwitch.isChecked) "dark" else "light"
+        binding.themeSwitch.setOnClickListener {
+            val theme = if (binding.themeSwitch.isChecked) "dark" else "light"
             Thread {
                 // Сохраняем тему в SharedPreferences для неавторизованных пользователей
                 with(sharedPreferences.edit()) {

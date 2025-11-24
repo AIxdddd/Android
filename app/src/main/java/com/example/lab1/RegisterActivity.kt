@@ -13,51 +13,42 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
-
+import com.example.lab1.databinding.RegisterBinding
 class RegisterActivity : Activity() {
 
     private lateinit var dbHelper: DatabaseHelper
     private lateinit var sharedPreferences: SharedPreferences
-
+    private lateinit var binding: RegisterBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         dbHelper = DatabaseHelper(this)
-
-
+        sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         when (dbHelper.getUserTheme(sharedPreferences.getLong("current_user_id", -1))) {
             "dark" -> setTheme(R.style.Theme_Lab1_Dark)
             else -> setTheme(R.style.Theme_Lab1_Light)
         }
-        setContentView(R.layout.register)
 
-        dbHelper = DatabaseHelper(this)
+        binding = RegisterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val logField = findViewById<EditText>(R.id.editTextLog)
-        val nameField = findViewById<EditText>(R.id.editTextName)
-        val passwordField = findViewById<EditText>(R.id.editTextPassword)
-        val birthDateField = findViewById<EditText>(R.id.editTextDate)
-        val male = findViewById<CheckBox>(R.id.checkBoxMale)
-        val female = findViewById<CheckBox>(R.id.checkBoxFemale)
-        val image = findViewById<ImageButton>(R.id.imageButton)
-        val addButton = findViewById<Button>(R.id.button3)
 
-        addButton.isEnabled = false
 
-        logField.addTextChangedListener(object : TextWatcher {
+        binding.addButton.isEnabled = false
+
+        binding.logFieldReg.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 val loginText = s?.toString() ?: ""
                 val hasAtSymbol = loginText.contains("@")
-                addButton.isEnabled = hasAtSymbol &&
-                        nameField.text.toString().isNotEmpty() &&
-                        passwordField.text.toString().isNotEmpty()
+                binding.addButton.isEnabled = hasAtSymbol &&
+                        binding.nameFieldReg.text.toString().isNotEmpty() &&
+                        binding.passwordFieldReg.text.toString().isNotEmpty()
 
                 if (!hasAtSymbol && loginText.isNotEmpty()) {
-                    logField.error = getString(R.string.error_login_at_symbol)
+                    binding.logFieldReg.error = getString(R.string.error_login_at_symbol)
                 } else {
-                    logField.error = null
+                    binding.logFieldReg.error = null
                 }
             }
         })
@@ -67,25 +58,25 @@ class RegisterActivity : Activity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                val loginText = logField.text.toString()
+                val loginText = binding.logFieldReg.text.toString()
                 val hasAtSymbol = loginText.contains("@")
-                addButton.isEnabled = hasAtSymbol &&
-                        nameField.text.toString().isNotEmpty() &&
-                        passwordField.text.toString().isNotEmpty()
+                binding.addButton.isEnabled = hasAtSymbol &&
+                        binding.nameFieldReg.text.toString().isNotEmpty() &&
+                        binding.passwordFieldReg.text.toString().isNotEmpty()
             }
         }
 
-        nameField.addTextChangedListener(textWatcher)
-        passwordField.addTextChangedListener(textWatcher)
+        binding.nameFieldReg.addTextChangedListener(textWatcher)
+        binding.passwordFieldReg.addTextChangedListener(textWatcher)
 
-        addButton.setOnClickListener {
-            val login = logField.text.toString()
-            val name = nameField.text.toString()
-            val password = passwordField.text.toString()
-            val birthDate = birthDateField.text.toString()
+        binding.addButton.setOnClickListener {
+            val login = binding.logFieldReg.text.toString()
+            val name = binding.nameFieldReg.text.toString()
+            val password = binding.passwordFieldReg.text.toString()
+            val birthDate = binding.birthDateFieldReg.text.toString()
             val gender = when {
-                male.isChecked -> getString(R.string.checkbox_male)
-                female.isChecked -> getString(R.string.checkbox_female)
+                binding.checkBoxMale.isChecked -> getString(R.string.checkbox_male)
+                binding.checkBoxFemale.isChecked -> getString(R.string.checkbox_female)
                 else -> ""
             }
             Thread {
@@ -156,19 +147,19 @@ class RegisterActivity : Activity() {
             }.start()
         }
 
-        image.setOnClickListener {
+        binding.imageButton.setOnClickListener {
             Log.i(getString(R.string.register), getString(R.string.log_select_image))
         }
 
-        male.setOnClickListener {
-            if (male.isChecked) {
-                female.isChecked = false
+        binding.checkBoxMale.setOnClickListener {
+            if (binding.checkBoxMale.isChecked) {
+                binding.checkBoxFemale.isChecked = false
             }
         }
 
-        female.setOnClickListener {
-            if (female.isChecked) {
-                male.isChecked = false
+        binding.checkBoxFemale.setOnClickListener {
+            if (binding.checkBoxFemale.isChecked) {
+                binding.checkBoxMale.isChecked = false
             }
         }
     }

@@ -9,11 +9,12 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-
+import com.example.lab1.databinding.LoginBinding
 class LoginActivity : Activity() {
 
     private lateinit var dbHelper: DatabaseHelper
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var binding: LoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,11 +22,13 @@ class LoginActivity : Activity() {
         dbHelper = DatabaseHelper(this)
 
 
+
         when (dbHelper.getUserTheme(sharedPreferences.getLong("current_user_id", -1))) {
             "dark" -> setTheme(R.style.Theme_Lab1_Dark)
             else -> setTheme(R.style.Theme_Lab1_Light)
         }
-        setContentView(R.layout.login)
+        binding = LoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         dbHelper = DatabaseHelper(this)
         sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
@@ -33,15 +36,11 @@ class LoginActivity : Activity() {
         // Применяем сохраненную тему
         applyThemeFromPrefs()
 
-        val logField = findViewById<EditText>(R.id.editTextLog2)
-        val passwordField = findViewById<EditText>(R.id.editTextPassword2)
-        val enterButton = findViewById<Button>(R.id.button4)
-        val regButton = findViewById<Button>(R.id.button5)
-        val closeButton = findViewById<Button>(R.id.button6)
 
-        enterButton.setOnClickListener {
-            val login = logField.text.toString()
-            val password = passwordField.text.toString()
+
+        binding.enterButton.setOnClickListener {
+            val login = binding.logField.text.toString()
+            val password = binding.passwordField.text.toString()
             Thread {
                 val user = dbHelper.getUser(login, password)
                 runOnUiThread {
@@ -70,11 +69,11 @@ class LoginActivity : Activity() {
             }.start()
         }
 
-        regButton.setOnClickListener {
+        binding.regButton.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
 
-        closeButton.setOnClickListener {
+        binding.closeButton.setOnClickListener {
             finish()
         }
     }
